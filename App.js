@@ -1,5 +1,5 @@
 ////////////////////////////////////////////
-//              DOM            
+//              DOM
 const START_BUTTON = document.querySelector("#start_btn");
 const INPUTS = document.getElementsByTagName("input");
 const PAGE_1 = document.querySelector(".page_1");
@@ -14,11 +14,11 @@ ERROR_PAGE.style.display = "none";
 
 ////////////////////////////////////////////
 //              Variables
-let Name; 
+let Name;
 let Level;
 let isGameOver = false;
 let DATAS = [];
-let obstacles = ["-1", "0", "1", "2", "3"]
+let obstacles = ["-1", "0", "1", "2", "3"];
 const easy = [
     ["", "", "", "1", "", "", ""],
     ["", "0", "", "", "", "2", ""],
@@ -26,7 +26,7 @@ const easy = [
     ["-1", "", "", "-1", "", "", "-1"],
     ["", "", "", "", "", "", ""],
     ["", "-1", "", "", "", "2", ""],
-    ["", "", "", "3", "", "", ""]
+    ["", "", "", "3", "", "", ""],
 ];
 
 const medium = [
@@ -36,7 +36,7 @@ const medium = [
     ["", "", "", "1", "", "", ""],
     ["2", "", "-1", "", "-1", "", "-1"],
     ["", "", "", "", "", "", ""],
-    ["", "", "-1", "", "2", "", ""]
+    ["", "", "-1", "", "2", "", ""],
 ];
 
 const hard = [
@@ -49,7 +49,7 @@ const hard = [
     ["", "", "", "", "", "-1", "", "", "", ""],
     ["", "", "1", "", "", "", "", "0", "-1", ""],
     ["3", "", "-1", "", "0", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "0", ""]
+    ["", "", "", "", "", "", "", "", "0", ""],
 ];
 
 ////////////////////////////////////////////
@@ -66,36 +66,28 @@ START_BUTTON.addEventListener("click", startButton);
 
 ///////////////////////////////////////////
 //              EVENT FUNCTIONS
-function startButton(e)
-{
+function startButton(e) {
     e.preventDefault();
     let row;
     let levelArr;
     PAGE_2.style.display = "flex";
     PAGE_1.style.display = "none";
 
-    
     handlingInputs();
 
-    if(Level === "easy")
-    {
+    if (Level === "easy") {
         row = 7;
         levelArr = easy;
-    }
-    else if(Level === "medium")
-    {
+    } else if (Level === "medium") {
         row = 7;
         levelArr = medium;
-    }
-    else if(Level === "hard")
-    {
+    } else if (Level === "hard") {
         row = 10;
         levelArr = hard;
     }
     createGameBoard(row);
     displayingBlocks(levelArr);
     letKnowThemOneAnother(row);
-
 }
 ///////////////////////////////////////////
 
@@ -103,28 +95,23 @@ function startButton(e)
 
 ////////////////////////////////////////////
 //              FUNCTIONS
-function handlingInputs()
-{
-    for (let i = 0; i < INPUTS.length; i++)
-    {
-        if(INPUTS[i].type == "radio" && INPUTS[i].checked)
-        {
+function handlingInputs() {
+    for (let i = 0; i < INPUTS.length; i++) {
+        if (INPUTS[i].type == "radio" && INPUTS[i].checked) {
             Level = INPUTS[i].value;
         }
-        if(INPUTS[i].type == "text")
-        {
+        if (INPUTS[i].type == "text") {
             Name = INPUTS[i].value;
         }
     }
 }
 
-function createGameBoard(row)//SQUARES EVENTS
-{
+function createGameBoard(row) {
+    //SQUARES EVENTS
     GAME_SCREEN.style.gridTemplateColumns = `repeat(${row}, 1fr)`;
     GAME_SCREEN.style.gridTemplateRows = `repeat(${row}, 1fr)`;
-    let countOfSquares = row*row;
-    for (let i = 0; i < countOfSquares; i++)
-    {
+    let countOfSquares = row * row;
+    for (let i = 0; i < countOfSquares; i++) {
         const square = document.createElement("div");
         square.className = "square";
         square.id = `${i}`;
@@ -132,223 +119,257 @@ function createGameBoard(row)//SQUARES EVENTS
     }
     SQUARES = document.querySelectorAll(".square");
 
-
-    for (let i = 0; i < SQUARES.length; i++)
-    {
+    for (let i = 0; i < SQUARES.length; i++) {
         SQUARES[i].addEventListener("click", () => {
-            
             let id = parseInt(SQUARES[i].id);
-            coloringSquares(id, row);    
+            coloringSquares(id, row);
             console.log("Bayram", DATAS[i]);
-            console.log(DATAS)
-            renderAgain(row)
-        })
-    
+            console.log(DATAS);
+            renderAgain(row);
+            countOfBulbsAroundObstacles(i);
+        });
     }
 }
 
-function renderAgain(row)
-{
-    for (let i = 0; i < row*row; i++)
-    {
-        if(DATAS[i].isBulb === true)
-        {
+function renderAgain(row) {
+    for (let i = 0; i < row * row; i++) {
+        if (DATAS[i].isBulb === true) {
             console.log("Mruaad", DATAS[i]);
             DATAS[i].isBulb = true;
-                    SQUARES[i].innerHTML = `<img class="image" src="./assets/idea.png" />`
-                    for (let j = 0; j < DATAS[i].X_LEFT.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[i].X_LEFT[j]))
-                        {
-                            SQUARES[DATAS[i].X_LEFT[j]].style.backgroundColor = "yellow";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
-    
-                    for (let j = 0; j < DATAS[i].X_RIGHT.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[i].X_RIGHT[j]))
-                        {
-                            SQUARES[DATAS[i].X_RIGHT[j]].style.backgroundColor = "yellow";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
-    
-                    for (let j = 0; j < DATAS[i].Y_DOWN.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[i].Y_DOWN[j]))
-                        {
-                            SQUARES[DATAS[i].Y_DOWN[j]].style.backgroundColor = "yellow";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
-    
-                    for (let j = 0; j < DATAS[i].Y_UP.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[i].Y_UP[j]))
-                        {
-                            SQUARES[DATAS[i].Y_UP[j]].style.backgroundColor = "yellow";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
+            SQUARES[i].innerHTML = `<img class="image" src="./assets/idea.png" />`;
+            for (let j = 0; j < DATAS[i].X_LEFT.length; j++) {
+                if (
+                    !obstacles.includes(SQUARES[DATAS[i].X_LEFT[j]].getAttribute("value"))
+                ) {
+                    SQUARES[DATAS[i].X_LEFT[j]].style.backgroundColor = "yellow";
+                } else {
+                    break;
                 }
-    }
-}
+            }
 
-function coloringSquares(id, row)
-{
-    for (let i = 0; i < row*row; i++)
-    {
-        if(id === parseInt(DATAS[i].order))
-        {
-            if(!DATAS[id].isObstacle)//Preventing 
-            {
-                
-                if(!DATAS[id].isBulb)
-                {
-                    DATAS[id].isBulb = true;
-                    SQUARES[id].innerHTML = `<img class="image" src="./assets/idea.png" />`
-                    for (let j = 0; j < DATAS[id].X_LEFT.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[id].X_LEFT[j]))
-                        {
-                            SQUARES[DATAS[id].X_LEFT[j]].style.backgroundColor = "yellow";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
-    
-                    for (let j = 0; j < DATAS[id].X_RIGHT.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[id].X_RIGHT[j]))
-                        {
-                            SQUARES[DATAS[id].X_RIGHT[j]].style.backgroundColor = "yellow";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
-    
-                    for (let j = 0; j < DATAS[id].Y_DOWN.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[id].Y_DOWN[j]))
-                        {
-                            SQUARES[DATAS[id].Y_DOWN[j]].style.backgroundColor = "yellow";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
-    
-                    for (let j = 0; j < DATAS[id].Y_UP.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[id].Y_UP[j]))
-                        {
-                            SQUARES[DATAS[id].Y_UP[j]].style.backgroundColor = "yellow";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
+            for (let j = 0; j < DATAS[i].X_RIGHT.length; j++) {
+                if (
+                    !obstacles.includes(
+                        SQUARES[DATAS[i].X_RIGHT[j]].getAttribute("value")
+                    )
+                ) {
+                    SQUARES[DATAS[i].X_RIGHT[j]].style.backgroundColor = "yellow";
+                } else {
+                    break;
                 }
-                else{
-                    DATAS[id].isBulb = false;
-                    SQUARES[id].innerHTML = ``
-                    for (let j = 0; j < DATAS[id].X_LEFT.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[id].X_LEFT[j]))
-                        {
-                            SQUARES[DATAS[id].X_LEFT[j]].style.backgroundColor = "white";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
-    
-                    for (let j = 0; j < DATAS[id].X_RIGHT.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[id].X_RIGHT[j]))
-                        {
-                            SQUARES[DATAS[id].X_RIGHT[j]].style.backgroundColor = "white";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
-    
-                    for (let j = 0; j < DATAS[id].Y_DOWN.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[id].Y_DOWN[j]))
-                        {
-                            SQUARES[DATAS[id].Y_DOWN[j]].style.backgroundColor = "white";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
-    
-                    for (let j = 0; j < DATAS[id].Y_UP.length; j++)
-                    {
-                        if(!obstacles.includes(DATAS[id].Y_UP[j]))
-                        {
-                            SQUARES[DATAS[id].Y_UP[j]].style.backgroundColor = "white";
-                        }
-                        else{
-                            break;
-    
-                        }
-                    }
-    
+            }
+
+            for (let j = 0; j < DATAS[i].Y_DOWN.length; j++) {
+                if (
+                    !obstacles.includes(SQUARES[DATAS[i].Y_DOWN[j]].getAttribute("value"))
+                ) {
+                    SQUARES[DATAS[i].Y_DOWN[j]].style.backgroundColor = "yellow";
+                } else {
+                    break;
+                }
+            }
+
+            for (let j = 0; j < DATAS[i].Y_UP.length; j++) {
+                if (
+                    !obstacles.includes(SQUARES[DATAS[i].Y_UP[j]].getAttribute("value"))
+                ) {
+                    SQUARES[DATAS[i].Y_UP[j]].style.backgroundColor = "yellow";
+                } else {
+                    break;
                 }
             }
         }
     }
 }
 
-function displayingBlocks(array)
-{
-    let oneDMArray = array.flat(1);
-    console.log(SQUARES);
-    for (let i = 0; i < oneDMArray.length; i++)
-    {   
-        if(oneDMArray[i] !== "")
-        {   
-            SQUARES[i].style.backgroundColor = "black";
-            SQUARES[i].style.color = "white";
-            if(oneDMArray[i] !== "-1") SQUARES[i].textContent = oneDMArray[i];
-        }
-        else
+function countOfBulbsAroundObstacles(i) {
+
+    if(DATAS[i].isBulb && !DATAS[i].isObstacle)
+    {
+        if(DATAS[DATAS[i].X_LEFT[1]].isObstacle && SQUARES[DATAS[i].X_LEFT[1]].getAttribute("value") === "1")
         {
-            SQUARES[i].style.cursor = "pointer"
+            if(DATAS[DATAS[i].X_LEFT[1]].countBulbs <= 1 && DATAS[DATAS[i].X_LEFT[1]].countBulbs >=0)
+            {
+                if(DATAS[DATAS[i].X_LEFT[1]].X_LEFT[1].isBulb)
+                {
+                    DATAS[DATAS[i].X_LEFT[1]].countBulbs++;
+                }
+                if(DATAS[DATAS[i].X_LEFT[1]].X_RIGHT[1].isBulb)
+                {
+                    DATAS[DATAS[i].X_LEFT[1]].countBulbs++;
+                }
+                if(DATAS[DATAS[i].X_LEFT[1]].Y_UP[1].isBulb)
+                {
+                    DATAS[DATAS[i].X_LEFT[1]].countBulbs++;
+                }
+
+                if(DATAS[DATAS[i].X_LEFT[1]].Y_DOWN[1].isBulb)
+                {
+                    DATAS[DATAS[i].X_LEFT[1]].countBulbs++;
+                }
+                console.log("ifler");
+            }
+            console.log("if")
+            
         }
-        SQUARES[i].setAttribute("value", oneDMArray[i]);//seeting values from data to html nodes
+
+        //2 steps
+        //counting and 
+        //checking
     }
 }
-function letKnowThemOneAnother(row)
-{
-    let countOfSquares = row*row;
-    for (let i = 0; i < countOfSquares; i++)//Going though the squares
-    {
+
+function coloringSquares(id, row) {
+    for (let i = 0; i < row * row; i++) {
+        if (id === parseInt(DATAS[i].order)) {
+            if (!DATAS[id].isObstacle) {
+                //Preventing
+
+
+                
+
+
+
+
+                if (!DATAS[id].isBulb) {
+                    
+                    
+                    
+                    
+                    DATAS[id].isBulb = true;
+                    SQUARES[
+                        id
+                    ].innerHTML = `<img class="image" src="./assets/idea.png" />`;
+
+
+
+
+
+
+                    for (let j = 0; j < DATAS[id].X_LEFT.length; j++) {
+                        if (
+                            !obstacles.includes(
+                                SQUARES[DATAS[id].X_LEFT[j]].getAttribute("value")
+                            )
+                        ) {
+                            SQUARES[DATAS[id].X_LEFT[j]].style.backgroundColor = "yellow";
+                        } else {
+                            break;
+                        }
+                    }
+
+                    for (let j = 0; j < DATAS[id].X_RIGHT.length; j++) {
+                        if (
+                            !obstacles.includes(
+                                SQUARES[DATAS[id].X_RIGHT[j]].getAttribute("value")
+                            )
+                        ) {
+                            SQUARES[DATAS[id].X_RIGHT[j]].style.backgroundColor = "yellow";
+                        } else {
+                            break;
+                        }
+                    }
+
+                    for (let j = 0; j < DATAS[id].Y_DOWN.length; j++) {
+                        if (
+                            !obstacles.includes(
+                                SQUARES[DATAS[id].Y_DOWN[j]].getAttribute("value")
+                            )
+                        ) {
+                            SQUARES[DATAS[id].Y_DOWN[j]].style.backgroundColor = "yellow";
+                        } else {
+                            break;
+                        }
+                    }
+
+                    for (let j = 0; j < DATAS[id].Y_UP.length; j++) {
+                        if (
+                            !obstacles.includes(
+                                SQUARES[DATAS[id].Y_UP[j]].getAttribute("value")
+                            )
+                        ) {
+                            SQUARES[DATAS[id].Y_UP[j]].style.backgroundColor = "yellow";
+                        } else {
+                            break;
+                        }
+                    }
+                } else {
+                    DATAS[id].isBulb = false;
+                    SQUARES[id].innerHTML = ``;
+                    for (let j = 0; j < DATAS[id].X_LEFT.length; j++) {
+                        if (
+                            !obstacles.includes(
+                                SQUARES[DATAS[id].X_LEFT[j]].getAttribute("value")
+                            )
+                        ) {
+                            SQUARES[DATAS[id].X_LEFT[j]].style.backgroundColor = "white";
+                        } else {
+                            break;
+                        }
+                    }
+
+                    for (let j = 0; j < DATAS[id].X_RIGHT.length; j++) {
+                        if (
+                            !obstacles.includes(
+                                SQUARES[DATAS[id].X_RIGHT[j]].getAttribute("value")
+                            )
+                        ) {
+                            SQUARES[DATAS[id].X_RIGHT[j]].style.backgroundColor = "white";
+                        } else {
+                            break;
+                        }
+                    }
+
+                    for (let j = 0; j < DATAS[id].Y_DOWN.length; j++) {
+                        if (
+                            !obstacles.includes(
+                                SQUARES[DATAS[id].Y_DOWN[j]].getAttribute("value")
+                            )
+                        ) {
+                            SQUARES[DATAS[id].Y_DOWN[j]].style.backgroundColor = "white";
+                        } else {
+                            break;
+                        }
+                    }
+
+                    for (let j = 0; j < DATAS[id].Y_UP.length; j++) {
+                        if (
+                            !obstacles.includes(
+                                SQUARES[DATAS[id].Y_UP[j]].getAttribute("value")
+                            )
+                        ) {
+                            SQUARES[DATAS[id].Y_UP[j]].style.backgroundColor = "white";
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+function displayingBlocks(array) {
+    let oneDMArray = array.flat(1);
+    console.log(SQUARES);
+    for (let i = 0; i < oneDMArray.length; i++) {
+        if (oneDMArray[i] !== "") {
+            SQUARES[i].style.backgroundColor = "black";
+            SQUARES[i].style.color = "white";
+            if (oneDMArray[i] !== "-1") SQUARES[i].textContent = oneDMArray[i];
+        } else {
+            SQUARES[i].style.cursor = "pointer";
+        }
+        SQUARES[i].setAttribute("value", oneDMArray[i]); //seeting values from data to html nodes
+    }
+}
+function letKnowThemOneAnother(row) {
+    let countOfSquares = row * row;
+    for (
+        let i = 0;
+        i < countOfSquares;
+        i++ //Going though the squares
+    ) {
         let data = {
             order: null,
             isBulb: false,
@@ -356,62 +377,51 @@ function letKnowThemOneAnother(row)
             X_RIGHT: [],
             X_LEFT: [],
             Y_UP: [],
-            Y_DOWN: []
+            Y_DOWN: [],
+            countBulbs: 0,
         };
         data.order = i;
 
-        if(obstacles.includes(SQUARES[i].getAttribute("value")))
-        {
+        if (obstacles.includes(SQUARES[i].getAttribute("value"))) {
             data.isObstacle = true;
+            data.countBulbs = 0;
         }
 
         //RIGHT
-        for(let xR = i; (xR === i) || (xR % row !== 0); xR++)//Ready
-        {
-            if(obstacles.includes(SQUARES[xR].getAttribute("value")))
-            {
-                data.X_RIGHT.push(SQUARES[xR].getAttribute("value"));
-            }
-            else
-            {
+        for (
+            let xR = i;
+            xR === i || xR % row !== 0;
+            xR++ //Ready
+        ) {
+            if (obstacles.includes(SQUARES[xR].getAttribute("value"))) {
+                data.X_RIGHT.push(xR);
+            } else {
                 data.X_RIGHT.push(xR);
             }
         }
         //LEFT
-        for (let xL = i; (xL % row >= 0); xL--)
-        {
-            if(obstacles.includes(SQUARES[xL].getAttribute("value")))
-            {
-                data.X_LEFT.push(SQUARES[xL].getAttribute("value"));
-            }
-            else
-            {
+        for (let xL = i; xL % row >= 0; xL--) {
+            if (obstacles.includes(SQUARES[xL].getAttribute("value"))) {
+                data.X_LEFT.push(xL);
+            } else {
                 data.X_LEFT.push(xL);
             }
             if (xL % row === 0) break;
         }
         //UP
-        for (let yUP = i; (yUP >= 0); yUP-=row)
-        {
-            if(obstacles.includes(SQUARES[yUP].getAttribute("value")))
-            {
-                data.Y_UP.push(SQUARES[yUP].getAttribute("value"));
-            }
-            else
-            {
+        for (let yUP = i; yUP >= 0; yUP -= row) {
+            if (obstacles.includes(SQUARES[yUP].getAttribute("value"))) {
+                data.Y_UP.push(yUP);
+            } else {
                 data.Y_UP.push(yUP);
             }
         }
 
         //DOWN
-        for (let yDOWN = i; (yDOWN < countOfSquares); yDOWN+=row)
-        {
-            if(obstacles.includes(SQUARES[yDOWN].getAttribute("value")))
-            {
-                data.Y_DOWN.push(SQUARES[yDOWN].getAttribute("value"));
-            }
-            else
-            {
+        for (let yDOWN = i; yDOWN < countOfSquares; yDOWN += row) {
+            if (obstacles.includes(SQUARES[yDOWN].getAttribute("value"))) {
+                data.Y_DOWN.push(yDOWN);
+            } else {
                 data.Y_DOWN.push(yDOWN);
             }
         }
