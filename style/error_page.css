@@ -1,0 +1,54 @@
+.error_page
+{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error
+{
+    padding: 2em;
+    width: 40%;
+    height: 20%;
+    border-radius: 15px;
+    text-align: center;
+    background-color: rgba(226, 246, 207, 0.774);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.error_name
+{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 70%;
+    background-color: cadetblue;
+    border-radius: 15px;
+    padding: 2em;
+
+
+}
+
+.error_name h1{
+    color: brown;
+}
+
+.close_btn{
+    height: 40px;
+    font-size: larger;
+    border: 0px;
+    border-radius: 15px;
+    cursor: pointer;
+    background-color: rgb(47, 150, 47);
+}
+.close_btn:hover{
+    position: relative;
+    background-color: rgb(231, 79, 79);
+    top: 2px;
+    left: 2px;
+}

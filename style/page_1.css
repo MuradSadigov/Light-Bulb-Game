@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+body{
+    background-color: rgb(197, 197, 11);
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.page_1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    gap: 3em;
+}
+
+.image_container{
+    text-align: center;
+}
+
+.title{
+    font-size: 3em;
+}
+
+.home_image{
+    min-width: 500px;
+    width: 35%;
+    height: auto;
+    border-radius: 20px;
+}
+
+.form_container{
+    padding: 2em;
+    font-size: larger;
+}
+
+form{
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.radio_button_list{
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+}
+li{
+    list-style: none;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+li input{
+    height: 20px;
+    width: 20px;
+    border: 0px solid;
+
+}
+.name_input{
+    height: 30px;
+    width: 200px;
+    font-size: 1.3em;
+    border-radius: 5px;
+    border: 0px solid;
+    padding: 0 5px;
+}
+
+#start_btn{
+    height: 40px;
+    font-size: larger;
+    border: 0px;
+    border-radius: 15px;
+    cursor: pointer;
+    background-color: rgb(47, 150, 47);
+}
+#start_btn:hover{
+    position: relative;
+    background-color: rgb(231, 79, 79);
+    top: 2px;
+    left: 2px;
+}
