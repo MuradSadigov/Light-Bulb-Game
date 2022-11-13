@@ -19,9 +19,11 @@
 
 .table-data{
     overflow: scroll;
-    overflow-y: hidden; /* Hide vertical scrollbar */
-    overflow-x: hidden;
 }
+
+.table-data::-webkit-scrollbar {
+    display: none;
+  }
 
 .head{
     width: 100px;
@@ -44,4 +46,40 @@
     height: 300px;
     flex-direction: column;
     gap: 1em;
+}
+
+
+#reload_btn{
+    display: none;
+    height: 40px;
+    width: 100px;
+    font-size: larger;
+    border: 0px;
+    border-radius: 15px;
+    cursor: pointer;
+    background-color: rgb(47, 150, 47);
+}
+#reload_btn:hover{
+    position: relative;
+    background-color: rgb(231, 79, 79);
+    top: 2px;
+    left: 2px;
+}
+
+#back_btn{
+    display: none;
+    height: 40px;
+    width: 200px;
+    font-size: larger;
+    border: 0px;
+    border-radius: 15px;
+    cursor: pointer;
+    background-color: rgb(47, 150, 47);
+}
+
+#back_btn:hover{
+    position: relative;
+    background-color: rgb(231, 79, 79);
+    top: 2px;
+    left: 2px;
 }

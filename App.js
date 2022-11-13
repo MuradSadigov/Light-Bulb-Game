@@ -14,6 +14,8 @@ const SCORES = document.querySelector(".table_scores");
 const TABLE = document.querySelector(".tables_wrapper");
 const FORM = document.querySelector("form");
 const TABLE_DATAS = document.querySelector(".table-data");
+const RELOAD = document.querySelector("#reload_btn");
+const BACK_TO_PAGE = document.querySelector("#back_btn");
 
 let SQUARES;
 ////////////////////////////////////////////
@@ -103,10 +105,10 @@ function closeButton() {
 	ERROR_PAGE.style.display = "none";
 	PAGE_1.style.display = "flex";
 }
+let row;
+let levelArr;
 function startButton(e) {
 	e.preventDefault();
-	let row;
-	let levelArr;
 
 	handlingInputs();
 
@@ -131,6 +133,7 @@ function startButton(e) {
 		PAGE_1.style.display = "none";
 		PLAYER_NAME.textContent = Name;
 		PLAYER_LEVEL.textContent = Level;
+
 		createGameBoard(row);
 		displayingBlocks(levelArr);
 		letKnowThemOneAnother(row);
@@ -199,14 +202,14 @@ function createGameBoard(row) {
     				clearTimeout(timer);
 				};
 				toLocalStorage(Name, Level, TIME.innerHTML);
-				// Name = "";
-				// Level = "";
-				
-				console.log(ArrayForLocalStorage)
+				RELOAD.style.display = "block";
+				BACK_TO_PAGE.style.display = "block";
 			}
 		});
 	}
 }
+
+
 function reIllimunatae(row) {
 	for (let i = 0; i < row * row; i++) {
 		if (DATAS[i].isBulb === true) {
@@ -545,7 +548,6 @@ function winnerChecker(row)
 		return false;
 	}
 }
-
 function toLocalStorage(user_name, user_level, user_time)
 {
 	let USER_DATA = {
@@ -558,9 +560,9 @@ function toLocalStorage(user_name, user_level, user_time)
 	USER_DATA.LEVEL = user_level;
 	USER_DATA.TIME = user_time;
 	ArrayForLocalStorage.push(USER_DATA);
+	ArrayForLocalStorage.reverse();
 	localStorage.setItem("PLAYER_DATA", JSON.stringify(ArrayForLocalStorage));
 }
-
 function toTable(user_name, user_level, user_time){
 	let row = document.createElement("div");
 	row.className = "row";
@@ -592,4 +594,26 @@ window.addEventListener("load", () => {
 		let a = ArrayForLocalStorage[i]
 		toTable(a.NAME, a.LEVEL, a.TIME);
 	}
+})
+
+BACK_TO_PAGE.addEventListener("click", () =>{
+	document.location.reload();
+})
+
+RELOAD.addEventListener("click", (e) => {
+	SQUARES = [];
+	DATAS = [];
+	console.log(SQUARES)
+	console.log(DATAS)
+	const get = document.querySelectorAll(".square")
+	for (let i = 0; i < get.length; i++)
+	{
+		get[i].remove();	
+		console.log(get[i])
+	}
+	startButton(e)
+	TIME.innerHTML = "00 : 00"
+	timerArr = [0, 0]
+	RELOAD.style.display = "none";
+	BACK_TO_PAGE.style.display = "none";
 })
