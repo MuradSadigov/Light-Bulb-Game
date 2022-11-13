@@ -24,8 +24,22 @@ body{
     gap: 3em;
 }
 
+.game_start
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100vh;
+    margin: 0 30%;
+    width: 100vw;
+}
 .image_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     text-align: center;
+    width: 100%;
 }
 
 .title{
@@ -33,13 +47,18 @@ body{
 }
 
 .home_image{
-    min-width: 500px;
-    width: 35%;
-    height: auto;
+    min-width: 400px;
+    width: 600px;
+    height: 300px;
     border-radius: 20px;
 }
 
+
 .form_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     padding: 2em;
     font-size: larger;
 }
@@ -49,6 +68,7 @@ form{
     display: flex;
     flex-direction: column;
     gap: 2em;
+    height: 300px;
 }
 
 .radio_button_list{

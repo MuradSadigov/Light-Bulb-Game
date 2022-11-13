@@ -5,12 +5,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    /* width: fit-content; */
 }
 
 .error
 {
     padding: 2em;
-    width: 40%;
+    width: 30%;
     height: 20%;
     border-radius: 15px;
     text-align: center;
@@ -18,7 +19,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
+    min-width: 390px;
+    min-height: 150px;
 }
 
 .error_name
@@ -26,20 +28,24 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    align-items: center;
+    gap: 1em;
     height: 70%;
     background-color: cadetblue;
     border-radius: 15px;
-    padding: 2em;
+    padding: 2.5em;
 
 
 }
 
 .error_name h1{
     color: brown;
+    min-width: 272px;
 }
 
 .close_btn{
-    height: 40px;
+    width: 100px;
+    height: 80px;
     font-size: larger;
     border: 0px;
     border-radius: 15px;

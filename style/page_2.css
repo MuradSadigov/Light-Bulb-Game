@@ -1,6 +1,6 @@
 .page_2{
     display: none;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     width: 100vw;
     height: 100vh;
@@ -9,6 +9,40 @@
 .game_screen{
     display: grid;
     background-color: white;
+}
+
+.player_info{
+    padding: 2em;
+    border-radius: 15px;
+    background-color: rgba(177, 231, 126, 0.836);
+}
+.player_data{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 200px;
+    background-color: rgba(233, 221, 179, 0.889);
+    font-size: 1.3em;
+    padding: 1em;
+    border-radius: 15px;
+}
+
+.player_data div{
+    display: flex;
+    justify-content: space-between;
+}
+
+code{
+    font-size: larger;
+    font-weight: 900;
+}
+
+.info{
+    width: 250px;
+    text-align: center;
+    margin-bottom: 1em;
+
+
 }
 
 .square{

@@ -20,9 +20,7 @@
         <div class="error">
             <div class="error_name">
                 <h1>Please, fill all the required inputs!</h1>
-                <div class="buttons">
-                    <button class="close_btn">Close</button>
-                </div>
+                <button class="close_btn">Close</button>    
             </div>
         </div>
     </div>
@@ -30,48 +28,65 @@
 
     <!--Home Page-->
     <div class="page_1">
-        <div class="image_container">
-            <h1 class="title">Light Bulb</h1>
-            <img class="home_image" src="./assets/27798.jpg" alt="Home Page Image">
-        </div>
-        <div class="form_container">
-            <form>
-                
-                <div class="text_input_list">
-                    <label for="name_input">Name: </label>
-                    <input class="name_input" type="text" value="">
-                </div>
 
-                <ul class="radio_button_list">
-                    <li>
-                        <label for="easy">Easy</label>
-                        <input id="easy" type="radio" name="level" value="easy" checked>
-                    </li>
-                    <li>
-                        <label for="medium">Medium</label>
-                        <input id="medium" type="radio" name="level" value="medium">
-                    </li>
-                    <li>
-                        <label for="hard">Hard</label>
-                        <input id="hard" type="radio" name="level" value="hard">
-                    </li>
-                    <li>
-                        <label for="custom">Custom</label>
-                        <input id="custom" type="radio" name="level" value="custom">
-                    </li>
-                </ul>
-                <button id="start_btn" type="submit">Start Game</button>
-            </form>
+        <div class="game_start">
+            <div class="image_container">
+                <h1 class="title">Light Bulb</h1>
+                <img class="home_image" src="./assets/27798.jpg" alt="Home Page Image">
+            </div>
+            <div class="form_container">
+                <button class="table_scores">SCORES</button>
+                <div class="tables_wrapper">
+                    <div class="tables">
+                        <div class="head">Name</div>
+                        <div class="head">Level</div>
+                        <div class="head">Time</div>
+                    </div>
+                    <div class="table-data">
+                        
+                    </div>
+                </div>
+                <form>
+                    
+                    <div class="text_input_list">
+                        <label for="name_input">Name: </label>
+                        <input class="name_input" maxlength="10" type="text" value="">
+                    </div>
+    
+                    <ul class="radio_button_list">
+                        <li>
+                            <label for="easy">Easy</label>
+                            <input id="easy" type="radio" name="level" value="easy">
+                        </li>
+                        <li>
+                            <label for="medium">Medium</label>
+                            <input id="medium" type="radio" name="level" value="medium">
+                        </li>
+                        <li>
+                            <label for="hard">Hard</label>
+                            <input id="hard" type="radio" name="level" value="hard">
+                        </li>
+                        <li>
+                            <label for="custom">Custom</label>
+                            <input id="custom" type="radio" name="level" value="custom">
+                        </li>
+                    </ul>
+                    <button id="start_btn" type="submit">Start Game</button>
+                </form>
+            </div>
         </div>
     </div>
     <!--Page 2-->
 
     <div class="page_2">
-        <!-- <div class="player_info">
+        <div class="player_info">
             <h1 class="info">Player Info:</h1>
-            <code class="player_name">MURAD</code>
-            <code class="player_level">Easy</code>
-        </div> -->
+            <div class="player_data">
+                <div>Name: <code class="player_name"></code></div>
+                <div>Level: <code class="player_level"></code></div>
+                <div>Time: <code class="time">00 : 00</code></div>
+            </div>
+        </div>
         <div class="game_screen">
             
         </div>
