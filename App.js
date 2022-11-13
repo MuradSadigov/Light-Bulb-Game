@@ -17,7 +17,6 @@ const TABLE_DATAS = document.querySelector(".table-data");
 
 let SQUARES;
 ////////////////////////////////////////////
-ERROR_PAGE.style.display = "none";
 
 //#########################################
 
