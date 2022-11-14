@@ -54,7 +54,6 @@ code{
     border: 0.5px solid grey;
     height: 80px;
     width:  80px;
-    /* cursor: pointer; */
     display: flex;
     justify-content: center;
     align-items: center;

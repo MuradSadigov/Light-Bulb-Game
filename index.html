@@ -36,6 +36,7 @@
             </div>
             <div class="form_container">
                 <button class="table_scores">SCORES</button>
+                <button class="saved_games">SAVED GAMES</button>
                 <div class="tables_wrapper">
                     <div class="tables">
                         <div class="head">Name</div>
@@ -43,6 +44,19 @@
                         <div class="head">Time</div>
                     </div>
                     <div class="table-data">
+
+                    </div>
+                </div>
+                <div class="saved_tables">
+                    <div class="saved_table_heads">
+                        <div class="head">Name</div>
+                        <div class="head">Level</div>
+                        <div class="head">Time</div>
+                        <div class="head"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                            <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+                          </svg></div>
+                    </div>
+                    <div class="saved_data">
 
                     </div>
                 </div>
@@ -85,9 +99,11 @@
                 <div>Name: <code class="player_name"></code></div>
                 <div>Level: <code class="player_level"></code></div>
                 <div>Time: <code class="time">00 : 00</code></div>
+                <code class="status"></code>
             </div>
             <button id="reload_btn">RELOAD</button>
             <button id="back_btn">BACK TO HOME PAGE</button>
+            <button id="save_game">SAVE GAME</button>
         </div>
         <div class="game_screen">
             

@@ -16,7 +16,14 @@ const FORM = document.querySelector("form");
 const TABLE_DATAS = document.querySelector(".table-data");
 const RELOAD = document.querySelector("#reload_btn");
 const BACK_TO_PAGE = document.querySelector("#back_btn");
+const SAVE_GAME = document.querySelector("#save_game");
+const SAVED_GAME_BTN = document.querySelector(".saved_games");
+const SAVED = document.querySelector(".saved_tables");
+const SAVED_DATA = document.querySelector(".saved_data");
+const STATUS = document.querySelector(".status");
 
+const BUTTON_FOR_RESUM = document.querySelectorAll(".resume");
+let isMore = false;
 let SQUARES;
 ////////////////////////////////////////////
 
@@ -24,18 +31,21 @@ let SQUARES;
 
 ////////////////////////////////////////////
 //              Variables
-
 let checkBtn = true;
 let isTABLE = false;
-let timer;
+let isSAVED = false;
+let isGameOver = false;
+let JSON_SAVED_VALUE = JSON.parse(localStorage.getItem("SAVED_GAME")) ?? [];
+let SAVED_GAME = [...JSON_SAVED_VALUE];
 let JSON_value = JSON.parse(localStorage.getItem("PLAYER_DATA")) ?? [];
 let ArrayForLocalStorage = [...JSON_value];
-
-//___________sec, min, hour
-let timerArr = [0, 0];
+let timer;
+let row;
+let levelArr;
+let count = 0;
 let Name;
 let Level;
-let isGameOver = false;
+let timerArr = [0, 0];
 let DATAS = [];
 let obstacles = ["-1", "0", "1", "2", "3"];
 let obstaclesSub = ["1", "2", "3"];
@@ -48,7 +58,6 @@ const easy = [
 	["", "-1", "", "", "", "2", ""],
 	["", "", "", "3", "", "", ""],
 ];
-
 const medium = [
 	["", "", "0", "", "-1", "", ""],
 	["", "", "", "", "", "", ""],
@@ -58,7 +67,6 @@ const medium = [
 	["", "", "", "", "", "", ""],
 	["", "", "-1", "", "2", "", ""],
 ];
-
 const hard = [
 	["", "-1", "", "", "", "", "", "", "", ""],
 	["", "", "", "", "", "3", "", "2", "", "-1"],
@@ -71,7 +79,6 @@ const hard = [
 	["3", "", "-1", "", "0", "", "", "", "", ""],
 	["", "", "", "", "", "", "", "", "0", ""],
 ];
-
 ////////////////////////////////////////////
 
 //#########################################
@@ -81,32 +88,35 @@ const hard = [
 START_BUTTON.addEventListener("click", startButton);
 CLOSE_BTN.addEventListener("click", closeButton);
 SCORES.addEventListener("click", scoreHandler);
+RELOAD.addEventListener("click", reloadingGame);
+
 ////////////////////////////////////////////
 
 //#########################################
 
 ///////////////////////////////////////////
-//              EVENT FUNCTIONS
+//              FUNCTIONS
+
+//#########################################
+
 function scoreHandler(){
 	if(!isTABLE)
 	{
 		TABLE.style.display = "flex";
 		FORM.style.display = "none";
+		SAVED.style.display = "none"
 		isTABLE = true;
 	}else{
 		TABLE.style.display = "none";
 		FORM.style.display = "flex";
+		SAVED.style.display = "none"
 		isTABLE = false
 	}
 }
-
-
 function closeButton() {
 	ERROR_PAGE.style.display = "none";
 	PAGE_1.style.display = "flex";
 }
-let row;
-let levelArr;
 function startButton(e) {
 	e.preventDefault();
 
@@ -140,12 +150,6 @@ function startButton(e) {
 	}
 
 }
-///////////////////////////////////////////
-
-//#########################################
-
-////////////////////////////////////////////
-//              FUNCTIONS
 function handlingInputs() {
 	for (let i = 0; i < INPUTS.length; i++) {
 		if (INPUTS[i].type == "radio" && INPUTS[i].checked) {
@@ -188,7 +192,6 @@ function createGameBoard(row) {
 				}
 			}
 			else {
-				//call deillimunate function
 				deillimunate(id, row);
 				reverseCheckBox(id);
 				reIllimunatae(row);
@@ -196,7 +199,8 @@ function createGameBoard(row) {
 			}
 			if(winnerChecker(row))
 			{
-				console.log("WINNER");
+				STATUS.innerHTML = "SOLVED!😀";
+				STATUS.style.display = "block";
 				if (!checkBtn) {
 					checkBtn = true;
     				clearTimeout(timer);
@@ -204,12 +208,11 @@ function createGameBoard(row) {
 				toLocalStorage(Name, Level, TIME.innerHTML);
 				RELOAD.style.display = "block";
 				BACK_TO_PAGE.style.display = "block";
+				disableClick();
 			}
 		});
 	}
 }
-
-
 function reIllimunatae(row) {
 	for (let i = 0; i < row * row; i++) {
 		if (DATAS[i].isBulb === true) {
@@ -227,9 +230,11 @@ function checkBlocks(id) {
 		DATAS[DATAS[id].Y_DOWN[1]],
 	];
 
+	let allowed = []
+
 	for (let i = 0; i < blocks.length; i++) {
 		let block = blocks[i];
-
+		
 		if (block === undefined) {
 			continue;
 		}
@@ -237,22 +242,24 @@ function checkBlocks(id) {
 			if (
 				block.isObstacle &&
 				block.countBulbs >= parseInt(SQUARES[block.order].getAttribute("value"))
-			) {
+				) {
 				return false;
 			} else if (
 				block.isObstacle &&
 				block.countBulbs < parseInt(SQUARES[block.order].getAttribute("value"))
 			) {
-				block.countBulbs++;
-
-			
-			}
-			if(block.countBulbs === parseInt(SQUARES[block.order].getAttribute("value")))
-			{	
-				SQUARES[block.order].style.backgroundColor = "green";
+				allowed.push(block);
 			}
 		}
 	}
+	
+	allowed.forEach(block => {
+		block.countBulbs++;
+		if(block.countBulbs === parseInt(SQUARES[block.order].getAttribute("value")))
+		{	
+			SQUARES[block.order].style.backgroundColor = "green";
+		}
+})
 
 	return true;
 }
@@ -462,7 +469,7 @@ function letKnowThemOneAnother(row) {
 		for (
 			let xR = i;
 			xR === i || xR % row !== 0;
-			xR++ //Ready
+			xR++
 		) {
 			if (obstacles.includes(SQUARES[xR].getAttribute("value"))) {
 				data.X_RIGHT.push(xR);
@@ -513,7 +520,7 @@ function timerHandler() {
     }
     TIME.innerHTML = `${timerArr[1]} : ${timerArr[0]}`;
     timer = setTimeout(timerHandler, 1000);
-};
+}
 function winnerChecker(row)
 {
 	let countOfYellow = 0;
@@ -587,33 +594,111 @@ function toTable(user_name, user_level, user_time){
 	TABLE_DATAS.appendChild(row)
 
 }
-
 window.addEventListener("load", () => {
 	for (let i = 0; i < ArrayForLocalStorage.length; i++)
 	{
 		let a = ArrayForLocalStorage[i]
 		toTable(a.NAME, a.LEVEL, a.TIME);
 	}
-})
+	for (let i = 0; i < SAVED_GAME.length; i++)
+	{
+		savedGameToTable(SAVED_GAME[i].name, SAVED_GAME[i].time, SAVED_GAME[i].level)
+	}
 
+});
 BACK_TO_PAGE.addEventListener("click", () =>{
 	document.location.reload();
-})
-
-RELOAD.addEventListener("click", (e) => {
+});
+function reloadingGame(e)
+{
 	SQUARES = [];
 	DATAS = [];
-	console.log(SQUARES)
-	console.log(DATAS)
 	const get = document.querySelectorAll(".square")
 	for (let i = 0; i < get.length; i++)
 	{
 		get[i].remove();	
-		console.log(get[i])
 	}
 	startButton(e)
 	TIME.innerHTML = "00 : 00"
 	timerArr = [0, 0]
 	RELOAD.style.display = "none";
 	BACK_TO_PAGE.style.display = "none";
+}
+function disableClick(){
+	for (let i = 0; i < SQUARES.length; i++)
+	{
+		SQUARES[i].style.pointerEvents = "none"
+	}
+}
+SAVE_GAME.addEventListener("click", () => {
+	saveGame();
+	savedGameToTable();
 })
+function saveGame(){
+
+	let DATA_SAVE = {
+		square: [],
+		datas: [],
+		name: "",
+		time: "",
+		level: ""
+	}
+	for (let i = 0; i < SQUARES.length; i++)
+	{
+		DATA_SAVE.square.push({order: DATAS[i].order, color: window.getComputedStyle(SQUARES[i] ,null).getPropertyValue('background-color')});
+	}
+
+	DATA_SAVE.datas = DATAS;
+	DATA_SAVE.name = Name;
+	DATA_SAVE.time = TIME.innerHTML;
+	DATA_SAVE.level = Level;
+	SAVED_GAME.push(DATA_SAVE)
+	localStorage.setItem("SAVED_GAME", JSON.stringify(SAVED_GAME));
+	disableClick();
+	clearTimeout(timer);
+	RELOAD.style.display = "block";
+	BACK_TO_PAGE.style.display = "block";
+}
+function savedGameToTable(name1, time1, level1){
+	let row = document.createElement("div");
+	row.className = "row";
+
+	let name = document.createElement("div");
+	name.className = "name";
+
+	let level = document.createElement("div");
+	level.className = "level";
+
+	let time = document.createElement("div");
+	time.className = "time";
+
+	let button = document.createElement("button");
+	button.className = "resume";
+	button.innerHTML = "RESUME";
+	button.id = count;
+	count++;
+
+	name.textContent = name1;	
+	time.textContent = time1;	
+	level.textContent = level1;
+
+	row.appendChild(name);
+	row.appendChild(level);
+	row.appendChild(time);
+	row.appendChild(button);
+	SAVED_DATA.appendChild(row);
+}
+SAVED_GAME_BTN.addEventListener("click", () => {
+	if(!isSAVED)
+	{
+		SAVED.style.display = "flex";
+		FORM.style.display = "none";
+		TABLE.style.display = "none";
+		isSAVED = true;
+	}else{
+		SAVED.style.display = "none";
+		FORM.style.display = "flex";
+		TABLE.style.display = "none";
+		isSAVED = false
+	}
+});
